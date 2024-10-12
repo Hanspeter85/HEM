@@ -106,9 +106,6 @@ x_com <- data.frame("product" = products$full$Name,
                     "production_associated_with_materials" = round(x_0,0),
                     "Compare_row_sum_of_x_0_matrix" = round(rowSums(x_0_matrix),0))
 
-x_com[is.na(x_com)] <- 0
-
-colSums(x_com[,-1])
 
 ## 3. Estimate carbon footprint and embodied flows associated with materials production
 
@@ -118,7 +115,7 @@ f[is.na(f)] <- 0
 
 # Embodied carbon flow matrix (source of emissions in rows and materials production in column)
 CF <- f * x_0_matrix[,products$material$Number] 
-colSums(CF)
+
 colnames(CF) <- products$material$short_name
 
 df <- CF %>% 
@@ -136,6 +133,5 @@ df <- CF %>%
 
 write.xlsx(list("raw" = df), "./output/carbon footprint of materials production by source product.xlsx")
   
-
 # Share of materials production in global GWP100 emissions
 100* sum(CF) / ( sum(q_gwp) + sum(q_y_gwp) )
